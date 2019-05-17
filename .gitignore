@@ -4,3 +4,5 @@ rng-opencl
 compile.sh
 pi.fut
 xrng-old.fut
+pi-c
+pi-opencl

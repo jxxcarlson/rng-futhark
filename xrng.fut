@@ -1,11 +1,17 @@
 -- FILE: xrng.fut
 -- This is a hand-made, not very good random number generator
 -- used as a part of a project to learn and explain Futhark.
+-- As an application, we compute an approximation to pi
+-- using a Montecarlo method. Montecarlo methods are note
+-- a good way to compute pi, but there are other problem areas,
+-- e.g. physics and finance, where they are the method of choice.
 
 module xrng = {
 
-  -- Compile:    futhark opencl xrng.fut -o rng-opencl
-  -- Test:       echo 1000 | ./rng-opencl -t \/dev/stderr > /dev/null
+  -- Compile:       futhark opencl xrng.fut -o pi-opencl
+  -- Bernchamrks:   echo 100000 | ./pi-opencl -t \/dev/stderr > /dev/null
+  -- Compute pi:    echo 100000 | ./pi-opencl
+
 
   -- The state of the generators consists of a
   -- triple of integers plus a floating point number
@@ -53,19 +59,40 @@ module xrng = {
 
 -- Iterate the gnerator n times, returing the state of lcgen and
 -- a list of f32's
+-- BAD CODE: O(N**2)
 let iterate (f:state -> (state,f32)) (a:state) (n:i32): (state, []f32) =
    loop output = (a, []) for i < n do
       let (state_, numbers) = output
       let (new_state_, new_number) = f state_
       in (new_state_, [new_number] ++ numbers)
 
-
+-- LIKEWISE BAD CODE
 let gen_sequence (seed:state) (n:i32) : (state, []f32) =
   iterate lcgen seed n
 
- -- Example: (xrng.iterate xrng.generate (1,2,3) 5).2
+-- For Montecarlo computatin of Pi
+let pi_ (seed:state)(n:i32) : (state, i32)  =
+  loop (state_, count:i32) = (seed, 0) for i < n do
+    let (state_1, x_) = lcgen state_
+    let (state_2, y_) = lcgen state_1
+    let x = 2*x_ - 1
+    let y = 2*y_ - 1
+    let delta_count = if x*x + y*y < 1
+      then 1
+      else 0
+    let new_count = count + delta_count
+    in (state_2, new_count)
 
-let main (n:i32): []f32 =
-  (gen_sequence (1,2,3) n).2
+-- | Montecarlo computation of pi:
+--     > xrng.pi (1,3,5) 10000
+--     3.1476f32
+let pi (seed:state)(n:i32) : f32 =
+  let count = (pi_ (seed:state)(n:i32)).2
+  let ratio = (f32.i32 count)/(f32.i32 n)
+  in  4*ratio
 
 }
+
+
+let main (n:i32): f32 =
+  xrng.pi (1,2,3) n
