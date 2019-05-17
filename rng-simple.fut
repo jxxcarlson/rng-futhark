@@ -1,5 +1,7 @@
 module xrng = {
 
+  -- Test: echo 1000 | ./rng-opencl -t \/dev/stderr > /dev/null
+  
   -- The state of the generators consists of a
   -- triple of integers plus a floating point number
 
