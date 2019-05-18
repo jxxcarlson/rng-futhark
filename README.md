@@ -12,7 +12,11 @@ and `f1`, `f2`, `f3` are LCGs as above. When the state of the generator is updat
 
 ## A Monte Carlo computation
 
-We use the random number generator to compute a value for $\pi$. The idea is to randomly sprinkle $N$ points in the square $-1 \le x \le 1$, $-1 \le y \le 1$ and count the number $n$ that land inside the unit circle, $x^2 + y^2 \le 1$.  Then $4n/N$ is an approximation to $\pi$. The method converges quiet slowly, so this is not a great way to compute $\pi$. However, for many other problems, Monte Carlo methods are the method of choice.  See these references, for example:
+We use the random number generator to compute a value for $\pi$. The idea is to randomly sprinkle $N$ points in the square $-1 \le x \le 1$, $-1 \le y \le 1$ and count the number $n$ that land inside the unit circle, $x^2 + y^2 \le 1$.  Then $4n/N$ is an approximation to $\pi$. The method converges quiet slowly, so this is not a great way to compute $\pi$.
+
+For much better MonteCarlo method for computing  $\pi$, see [futhark-book.readthedocs.io](https://futhark-book.readthedocs.io/en/latest/random-sampling.html).
+
+For many other problems, Monte Carlo methods are the method of choice.  See these references, for example:
 
 [An Overview of MonteCarlo Methods @ towardsdatascience.com](https://towardsdatascience.com/an-overview-of-monte-carlo-methods-675384eb1694)
 

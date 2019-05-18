@@ -70,7 +70,7 @@ let iterate (f:state -> (state,f32)) (a:state) (n:i32): (state, []f32) =
 let gen_sequence (seed:state) (n:i32) : (state, []f32) =
   iterate lcgen seed n
 
--- For Montecarlo computatin of Pi
+-- For Montec Carlo computatin of Pi
 let pi_ (seed:state)(n:i32) : (state, i32)  =
   loop (state_, count:i32) = (seed, 0) for i < n do
     let (state_1, x_) = lcgen state_
@@ -83,7 +83,7 @@ let pi_ (seed:state)(n:i32) : (state, i32)  =
     let new_count = count + delta_count
     in (state_2, new_count)
 
--- | Montecarlo computation of pi:
+-- | Monte Carlo computation of pi:
 --     > xrng.pi (1,3,5) 10000
 --     3.1476f32
 let pi (seed:state)(n:i32) : f32 =
